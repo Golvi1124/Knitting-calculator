@@ -1,26 +1,20 @@
-﻿
-
-namespace Knitting_calculator;
+﻿namespace Knitting_calculator;
 
 class Program
 {
-
-    // Class-level fields Shared across methods
+    // Shared across methods
     static string measureSystem = "";
     static bool validEntry = false;
     static string? input;
     static int stitchesCount = 0;
     static int rowsCount = 0;
+    static double width = 0;
+    static double length = 0;
 
     static void Main(string[] args)
-
     {
         // variables that support data entry
-
         string menuSelection = "";
-
-
-
 
         // display menu options
         do
@@ -50,11 +44,15 @@ class Program
 
                     Console.WriteLine("You have selected: Gauge calculator.");
                     InOrCm();
-                    Console.WriteLine($"You selected: {measureSystem}");
                     GetStitchesCount();
                     GetRowsCount();
-                  //  Console.WriteLine($"What is the length in \"{measureSystem}\" of your test piece?");
-                  //  Console.WriteLine($"What is the width in \"{measureSystem}\" of your test piece?");
+                    GetWidth();
+                    GetLength();
+                   
+                   //Will make something better looking later
+                   
+
+
 
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
@@ -102,8 +100,14 @@ class Program
             if (readResult != null)
             {
                 measureSystem = readResult.ToLower();
-                if (measureSystem == "in" || measureSystem == "cm")
+                if (measureSystem == "in")
                 {
+                    Console.WriteLine("You selected: Imperial (in)"); 
+                    validEntry = true;
+                }
+                else if (measureSystem == "cm")
+                {
+                    Console.WriteLine("You selected: Metric (cm)"); 
                     validEntry = true;
                 }
                 else
@@ -114,14 +118,10 @@ class Program
             }
 
         } while (!validEntry);
-
-
     }
 
     public static void GetStitchesCount()
     {
-
-
         do
         {
             Console.WriteLine("How many stitches per 1 row have you made?");
@@ -142,8 +142,6 @@ class Program
 
     public static void GetRowsCount()
     {
-
-
         do
         {
             Console.WriteLine("How many rows have you made?");
@@ -161,5 +159,45 @@ class Program
             }
         } while (!validEntry);
     }
+
+    public static void GetWidth()
+    {
+        do
+        {
+            Console.WriteLine($"What is the width of your piece - {measureSystem}?");
+            string? input = Console.ReadLine(); // Read user input
+
+            // Use TryParse to validate and convert the input
+            if (double.TryParse(input, out width) && width > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!"); 
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
+
+    public static void GetLength()
+    {
+        do
+        {
+            Console.WriteLine($"What is the length of your piece - {measureSystem}?");
+            string? input = Console.ReadLine(); 
+            
+            if (double.TryParse(input, out length) && length > 0)
+            {
+                validEntry = true; 
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!"); 
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
+
 
 }
