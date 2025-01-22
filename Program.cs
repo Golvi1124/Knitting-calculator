@@ -10,6 +10,8 @@ class Program
     static int rowsCount = 0;
     static double width = 0;
     static double length = 0;
+    static double stitchesPerUnit = 0;
+    static double rowsPerUnit = 0;
 
     static void Main(string[] args)
     {
@@ -48,9 +50,50 @@ class Program
                     GetRowsCount();
                     GetWidth();
                     GetLength();
-                   
-                   //Will make something better looking later
-                   
+
+//Will make something better looking later
+                    double stitchesPerUnit, rowsPerUnit;
+
+                    // Check the measurement system and perform calculations accordingly
+                    if (measureSystem == "cm")
+                    {
+                        stitchesPerUnit = stitchesCount / width;
+                        rowsPerUnit = rowsCount / length;
+                    }
+                    else
+                    {
+                        double cmToInch = 2.54;
+                        width = width / cmToInch;
+                        length = length / cmToInch;
+                        stitchesPerUnit = stitchesCount / width;
+                        rowsPerUnit = rowsCount / length;
+                    }
+
+
+                    // Display results for cm or inch depending on the selected system
+                    Console.WriteLine("Results. If needed, round up accordingly to pattern.");
+                    Console.WriteLine("----------------------------------------------------");
+
+                    // Display stitches per unit (cm or inch)
+                    Console.WriteLine($"Stitches per cm = {stitchesPerUnit:F2}");
+                    Console.WriteLine($"Rows per cm = {rowsPerUnit:F2}");
+                    Console.WriteLine();
+
+                    // Calculate for 10 cm or 10 inches
+                    Console.WriteLine($"Stitches per 10 cm = {stitchesPerUnit * 10:F2}");
+                    Console.WriteLine($"Rows per 10 cm = {rowsPerUnit * 10:F2}");
+                    Console.WriteLine();
+
+                    // Calculate for 1 inch or 1 cm
+                    double stitchesPerInch = stitchesPerUnit * (measureSystem == "cm" ? 2.54 : 1);
+                    double rowsPerInch = rowsPerUnit * (measureSystem == "cm" ? 2.54 : 1);
+                    Console.WriteLine($"Stitches per inch = {stitchesPerInch:F2}");
+                    Console.WriteLine($"Rows per inch = {rowsPerInch:F2}");
+                    Console.WriteLine();
+
+                    // Calculate for 4 inches or 4 cm
+                    Console.WriteLine($"Stitches per 4 inch = {stitchesPerInch * 4:F2}");
+                    Console.WriteLine($"Rows per 4 inch = {rowsPerInch * 4:F2}");
 
 
 
@@ -102,12 +145,12 @@ class Program
                 measureSystem = readResult.ToLower();
                 if (measureSystem == "in")
                 {
-                    Console.WriteLine("You selected: Imperial (in)"); 
+                    Console.WriteLine("You selected: Imperial (in)");
                     validEntry = true;
                 }
                 else if (measureSystem == "cm")
                 {
-                    Console.WriteLine("You selected: Metric (cm)"); 
+                    Console.WriteLine("You selected: Metric (cm)");
                     validEntry = true;
                 }
                 else
@@ -174,7 +217,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!"); 
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -185,19 +228,20 @@ class Program
         do
         {
             Console.WriteLine($"What is the length of your piece - {measureSystem}?");
-            string? input = Console.ReadLine(); 
-            
+            string? input = Console.ReadLine();
+
             if (double.TryParse(input, out length) && length > 0)
             {
-                validEntry = true; 
+                validEntry = true;
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!"); 
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
     }
+
 
 
 }
