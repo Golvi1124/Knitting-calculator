@@ -12,6 +12,10 @@ class Program
     static double length = 0;
     static double stitchesPerUnit = 0;
     static double rowsPerUnit = 0;
+    static double stitchesPerMeasure;
+    static double stitchesPerMeasurePattern;
+    static int castOnCountPattern;
+    static double castOnCount;
 
     static void Main(string[] args)
     {
@@ -51,58 +55,21 @@ class Program
                     GetWidth();
                     GetLength();
 
-//Will make something better looking later
-                    double stitchesPerUnit, rowsPerUnit;
-
-                    // Check the measurement system and perform calculations accordingly
-                    if (measureSystem == "cm")
-                    {
-                        stitchesPerUnit = stitchesCount / width;
-                        rowsPerUnit = rowsCount / length;
-                    }
-                    else
-                    {
-                        double cmToInch = 2.54;
-                        width = width / cmToInch;
-                        length = length / cmToInch;
-                        stitchesPerUnit = stitchesCount / width;
-                        rowsPerUnit = rowsCount / length;
-                    }
-
-
-                    // Display results for cm or inch depending on the selected system
-                    Console.WriteLine("Results. If needed, round up accordingly to pattern.");
-                    Console.WriteLine("----------------------------------------------------");
-
-                    // Display stitches per unit (cm or inch)
-                    Console.WriteLine($"Stitches per cm = {stitchesPerUnit:F2}");
-                    Console.WriteLine($"Rows per cm = {rowsPerUnit:F2}");
-                    Console.WriteLine();
-
-                    // Calculate for 10 cm or 10 inches
-                    Console.WriteLine($"Stitches per 10 cm = {stitchesPerUnit * 10:F2}");
-                    Console.WriteLine($"Rows per 10 cm = {rowsPerUnit * 10:F2}");
-                    Console.WriteLine();
-
-                    // Calculate for 1 inch or 1 cm
-                    double stitchesPerInch = stitchesPerUnit * (measureSystem == "cm" ? 2.54 : 1);
-                    double rowsPerInch = rowsPerUnit * (measureSystem == "cm" ? 2.54 : 1);
-                    Console.WriteLine($"Stitches per inch = {stitchesPerInch:F2}");
-                    Console.WriteLine($"Rows per inch = {rowsPerInch:F2}");
-                    Console.WriteLine();
-
-                    // Calculate for 4 inches or 4 cm
-                    Console.WriteLine($"Stitches per 4 inch = {stitchesPerInch * 4:F2}");
-                    Console.WriteLine($"Rows per 4 inch = {rowsPerInch * 4:F2}");
-
-
-
+                    GaugeCalculations();
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
                     break;
 
                 case "2": // Calculate new Cast-On stitches
+
+                    Console.WriteLine("You have selected: Calculate new Cast-On stitches.");
+                    InOrCm();
+                    GetStitchesCountPerMeasurement();
+                    GetStitchesCountPerMeasurementPattern();
+                    // GetCastOnCountPattern();
+
+                    //  CastOnCalculations();
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
@@ -130,9 +97,9 @@ class Program
                     break;
             }
         } while (menuSelection != "exit");
-
     }
 
+    #region Input Methods
     public static void InOrCm()
     {
         do
@@ -242,6 +209,169 @@ class Program
         } while (!validEntry);
     }
 
+    public static void GetStitchesCountPerMeasurement()
+    {
+        do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "How many stitches do you have per 4 inches?";
+            }
+            else
+            {
+                prompt = "How many stitches do you have per 10 cm?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (double.TryParse(input, out stitchesPerMeasure) && stitchesPerMeasure > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
+
+    public static void GetStitchesCountPerMeasurementPattern()
+    {
+         {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "How many stitches pattern asks to have per 4 inches?";
+            }
+            else
+            {
+                prompt = "How many stitches pattern asks to have per 10 cm?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (double.TryParse(input, out stitchesPerMeasurePattern) && stitchesPerMeasurePattern > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
 
 
+
+    
+    public static void GetCastOnCountPattern()
+    {
+        do
+        {
+            Console.WriteLine($"How many Cast-on stitches pattern asks for?");
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out castOnCountPattern) && castOnCountPattern > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a whole positive number!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
+
+
+    #endregion
+
+    #region Outputs
+    public static void GaugeCalculations()
+    {
+        double stitchesPerUnit, rowsPerUnit;
+
+        // Check the measurement system and perform calculations accordingly
+        if (measureSystem == "cm")
+        {
+            stitchesPerUnit = stitchesCount / width;
+            rowsPerUnit = rowsCount / length;
+        }
+        else
+        {
+            double cmToInch = 2.54;
+            width = width / cmToInch;
+            length = length / cmToInch;
+            stitchesPerUnit = stitchesCount / width;
+            rowsPerUnit = rowsCount / length;
+        }
+
+
+        // Display results for cm or inch depending on the selected system
+        Console.WriteLine("Results. If needed, round up accordingly to pattern.");
+        Console.WriteLine("----------------------------------------------------");
+
+        // Display stitches per unit (cm or inch)
+        Console.WriteLine($"Stitches per cm = {stitchesPerUnit:F2}");
+        Console.WriteLine($"Rows per cm = {rowsPerUnit:F2}");
+        Console.WriteLine();
+
+        // Calculate for 10 cm or 10 inches
+        Console.WriteLine($"Stitches per 10 cm = {stitchesPerUnit * 10:F2}");
+        Console.WriteLine($"Rows per 10 cm = {rowsPerUnit * 10:F2}");
+        Console.WriteLine();
+
+        // Calculate for 1 inch or 1 cm
+        double stitchesPerInch = stitchesPerUnit * (measureSystem == "cm" ? 2.54 : 1);
+        double rowsPerInch = rowsPerUnit * (measureSystem == "cm" ? 2.54 : 1);
+        Console.WriteLine($"Stitches per inch = {stitchesPerInch:F2}");
+        Console.WriteLine($"Rows per inch = {rowsPerInch:F2}");
+        Console.WriteLine();
+
+        // Calculate for 4 inches or 4 cm
+        Console.WriteLine($"Stitches per 4 inch = {stitchesPerInch * 4:F2}");
+        Console.WriteLine($"Rows per 4 inch = {rowsPerInch * 4:F2}");
+
+    }
+
+
+/* 
+    static double stitchesPerMeasure;
+    static double stitchesPerMeasurePattern;
+    static int castOnCountPattern;
+    result: static double castOnCount;*/
+    public static void CastOnCalculations()
+    {
+
+         double stitchesPerUnit, rowsPerUnit;
+
+        // Check the measurement system and perform calculations accordingly
+        if (measureSystem == "cm")
+        {
+            stitchesPerUnit = stitchesCount / width;
+            rowsPerUnit = rowsCount / length;
+        }
+        else
+        {
+            double cmToInch = 2.54;
+            width = width / cmToInch;
+            length = length / cmToInch;
+            stitchesPerUnit = stitchesCount / width;
+            rowsPerUnit = rowsCount / length;
+        }
+
+        Console.WriteLine("Results. If needed, round up accordingly to pattern.");
+        Console.WriteLine("----------------------------------------------------");
+
+        Console.WriteLine($"New count of Cast-on stitches: {castOnCount}");
+
+    }
+    #endregion
 }
