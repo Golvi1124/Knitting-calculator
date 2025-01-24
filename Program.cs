@@ -6,28 +6,12 @@ class Program
     static string measureSystem = "";
     static bool validEntry = false;
     static string? input;
-    static int stitchesCount;
-    static int rowsCount;
-    static double width;
-    static double length;
-    static double stitchesPerUnit;
-    static double rowsPerUnit;
-    static double stitchesPerMeasure;
-    static double stitchesPerMeasurePattern;
-    static int castOnCountPattern;
-    static double newCastOnCount;
-    static int lengthPerSkein;
-    static int weightPerSkein;
-    static double weightOfProject;
-    static int desiredWidth, desiredLength;
-    static double lengthOfFrogged;
-    static int numberOfFrogged, desiredRowCount, desiredStitchesCount;
-    static double skeinsAmount;
+    static int stitchesCount, rowsCount, castOnCountPattern, lengthPerSkein, stitchesPerMeasurePattern, weightPerSkein, desiredWidth, desiredLength, numberOfFrogged, desiredRowCount, desiredStitchesCount;
+    static double width, length, stitchesPerMeasure, newCastOnCount, weightOfProject, lengthOfFrogged, skeinsAmount;
 
     static void Main(string[] args)
     {
-        // variables that support data entry
-        string menuSelection = "";
+        string menuSelection = ""; // support data entry
 
         // display menu options
         do
@@ -48,14 +32,13 @@ class Program
             if (input != null)
             {
                 menuSelection = input.ToLower();
-                // using a conditional statement that only processes the valid entry values, so the do statement is not required here.
             }
 
             switch (menuSelection)
             {
-                case "1": // Gauge calculator ✔
+                case "1": // Gauge calculator
 
-                    Console.WriteLine("You have selected: Gauge calculator.");
+                    Yellow("You have selected: Gauge calculator.");
                     InOrCm();
                     GetStitchesCount();
                     GetRowsCount();
@@ -68,9 +51,9 @@ class Program
                     input = Console.ReadLine();
                     break;
 
-                case "2": // Calculate new Cast-On stitches ✔
+                case "2": // Calculate new Cast-On stitches 
 
-                    Console.WriteLine("You have selected: Calculate new Cast-On stitches.");
+                    Yellow("You have selected: Calculate new Cast-On stitches.");
                     InOrCm();
                     GetStitchesCountPerMeasurement();
                     GetStitchesCountPerMeasurementPattern();
@@ -83,7 +66,7 @@ class Program
                     break;
 
                 case "3": // How much yarn would you need based on: stitch length 
-                    Console.WriteLine("You have selected: How much yarn would you need based on stitch length.");
+                    Yellow("You have selected: How much yarn would you need based on stitch length.");
                     InOrCm();
                     GetLengthPerSkein();
                     GetWeightPerSkein();
@@ -94,23 +77,13 @@ class Program
 
                     HowMuchYarnPerStitches();
 
-
-
-
-
-
-
-
-
-
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
                     break;
 
-                case "4": // How much yarn would you need based on: weight of product ✔
+                case "4": // How much yarn would you need based on: weight of product 
 
-                    Console.WriteLine("You have selected: How much yarn would you need based on weight of product.");
-
+                    Yellow("You have selected: How much yarn would you need based on weight of product.");
                     InOrCm();
                     GetLengthPerSkein();
                     GetWeightPerSkein();
@@ -122,9 +95,9 @@ class Program
                     input = Console.ReadLine();
                     break;
 
-                case "5": // Blanket size calculator ✔
+                case "5": // Blanket size calculator 
 
-                    Console.WriteLine("You have selected: Blanket size calculator.");
+                    Yellow("You have selected: Blanket size calculator.");
                     InOrCm();
                     GetStitchesCount();
                     GetRowsCount();
@@ -135,12 +108,17 @@ class Program
 
                     BlanketCalculations();
 
-
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
                     break;
+                
+                 case "exit":
+                    break; // Exit the switch statement immediately
 
                 default:
+                    Magenta("Invalid input! Please enter a number between 1 and 5!");
+                    Console.WriteLine("\nPress the Enter key to try again...");
+                    Console.ReadLine();
                     break;
             }
         } while (menuSelection != "exit");
@@ -159,17 +137,17 @@ class Program
                 measureSystem = readResult.ToLower();
                 if (measureSystem == "in")
                 {
-                    Console.WriteLine("You selected: Imperial (in)");
+                    Yellow("You selected: Imperial (in)");
                     validEntry = true;
                 }
                 else if (measureSystem == "cm")
                 {
-                    Console.WriteLine("You selected: Metric (cm)");
+                    Yellow("You selected: Metric (cm)");
                     validEntry = true;
                 }
                 else
                 {
-                    Console.WriteLine($" \"{measureSystem}\" is invalid input!");
+                    Magenta($" \"{measureSystem}\" is invalid input!");
                     validEntry = false;
                 }
             }
@@ -182,16 +160,15 @@ class Program
         do
         {
             Console.WriteLine("How many stitches per 1 row have you made?");
-            string? input = Console.ReadLine(); // Read user input
+            string? input = Console.ReadLine();
 
-            // Use TryParse to validate and convert the input
             if (int.TryParse(input, out stitchesCount) && stitchesCount > 0)
             {
-                validEntry = true; // Input is valid
+                validEntry = true;
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number."); // Error message for invalid input
+                Magenta("Invalid input. Please enter a positive whole number.");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -202,16 +179,15 @@ class Program
         do
         {
             Console.WriteLine("How many rows have you made?");
-            string? input = Console.ReadLine(); // Read user input
+            string? input = Console.ReadLine();
 
-            // Use TryParse to validate and convert the input
             if (int.TryParse(input, out rowsCount) && rowsCount > 0)
             {
-                validEntry = true; // Input is valid
+                validEntry = true;
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number."); // Error message for invalid input
+                Magenta("Invalid input. Please enter a positive whole number.");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -222,16 +198,15 @@ class Program
         do
         {
             Console.WriteLine($"What is the width of your piece - {measureSystem}?");
-            string? input = Console.ReadLine(); // Read user input
+            string? input = Console.ReadLine();
 
-            // Use TryParse to validate and convert the input
             if (double.TryParse(input, out width) && width > 0)
             {
                 validEntry = true;
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -250,7 +225,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -266,7 +241,7 @@ class Program
             {
                 prompt = "How many stitches do you have per 4 inches?";
             }
-            else
+            else //(measureSystem == "cm")
             {
                 prompt = "How many stitches do you have per 10 cm?";
             }
@@ -280,7 +255,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -296,7 +271,7 @@ class Program
             {
                 prompt = "How many stitches pattern asks to have per 4 inches?";
             }
-            else
+            else //(measureSystem == "cm")
             {
                 prompt = "How many stitches pattern asks to have per 10 cm?";
             }
@@ -304,21 +279,19 @@ class Program
             Console.WriteLine(prompt);
             string? input = Console.ReadLine();
 
-            if (double.TryParse(input, out stitchesPerMeasurePattern) && stitchesPerMeasurePattern > 0)
+            if (int.TryParse(input, out stitchesPerMeasurePattern) && stitchesPerMeasurePattern > 0)
             {
                 validEntry = true;
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
     }
 
-
     public static void GetCastOnCountPattern()
-
     {
         do
         {
@@ -331,12 +304,11 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a whole positive number!");
+                Magenta("Invalid input. Please enter a whole positive number!");
                 validEntry = false;
             }
         } while (!validEntry);
     }
-
 
     public static void GetLengthPerSkein()
     {
@@ -362,12 +334,13 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
 
     }
+    
     public static void GetWeightPerSkein()
     {
         do
@@ -392,12 +365,12 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
-
     }
+
     public static void GetProjectWeight()
     {
         do
@@ -422,13 +395,11 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
-
     }
-
 
     public static void GetDesiredWidth()
     {
@@ -454,12 +425,12 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
-
     }
+
     public static void GetDesiredLength()
     {
         do
@@ -484,7 +455,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
@@ -515,18 +486,17 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                Magenta("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
                 validEntry = false;
             }
         } while (!validEntry);
-
     }
+
     public static void GetNumberOfFrogged()
     {
         Console.WriteLine("Make any amount of stithes (at least 10).");
         do
         {
-
             Console.WriteLine("What is the amount of stitches you made?");
             string? input = Console.ReadLine();
 
@@ -536,12 +506,12 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                Magenta("Invalid input. Please enter a positive whole number!");
                 validEntry = false;
             }
         } while (!validEntry);
-
     }
+
     public static void GetDesiredRowCount()
     {
         do
@@ -555,11 +525,12 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a whole positive number!");
+                Magenta("Invalid input. Please enter a whole positive number!");
                 validEntry = false;
             }
         } while (!validEntry);
     }
+
     public static void GetDesiredStitchesCount()
     {
         do
@@ -573,39 +544,25 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a whole positive number!");
+                Magenta("Invalid input. Please enter a whole positive number!");
                 validEntry = false;
             }
         } while (!validEntry);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     #endregion
-
     #region Outputs
+
     public static void GaugeCalculations()
     {
         double stitchesPerUnit, rowsPerUnit;
 
-        // Check the measurement system and perform calculations accordingly
         if (measureSystem == "cm")
         {
             stitchesPerUnit = stitchesCount / width;
             rowsPerUnit = rowsCount / length;
         }
-        else
+        else //(measureSystem == "in")
         {
             double cmToInch = 2.54;
             width = width / cmToInch;
@@ -614,54 +571,44 @@ class Program
             rowsPerUnit = rowsCount / length;
         }
 
-        Console.WriteLine("Results. If needed, round up accordingly to pattern.");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nResults. If needed, round up accordingly to pattern.");
         Console.WriteLine("----------------------------------------------------");
-
-        // Display stitches per unit (cm or inch)
         Console.WriteLine($"Stitches per cm = {stitchesPerUnit:F2}");
         Console.WriteLine($"Rows per cm = {rowsPerUnit:F2}");
-        Console.WriteLine();
-
-        // Calculate for 10 cm or 10 inches
-        Console.WriteLine($"Stitches per 10 cm = {stitchesPerUnit * 10:F2}");
+        Console.WriteLine($"\nStitches per 10 cm = {stitchesPerUnit * 10:F2}");
         Console.WriteLine($"Rows per 10 cm = {rowsPerUnit * 10:F2}");
-        Console.WriteLine();
 
-        // Calculate for 1 inch or 1 cm
         double stitchesPerInch = stitchesPerUnit * (measureSystem == "cm" ? 2.54 : 1);
         double rowsPerInch = rowsPerUnit * (measureSystem == "cm" ? 2.54 : 1);
-        Console.WriteLine($"Stitches per inch = {stitchesPerInch:F2}");
+      
+        Console.WriteLine($"\nStitches per inch = {stitchesPerInch:F2}");
         Console.WriteLine($"Rows per inch = {rowsPerInch:F2}");
-        Console.WriteLine();
-
-        // Calculate for 4 inches or 4 cm
-        Console.WriteLine($"Stitches per 4 inch = {stitchesPerInch * 4:F2}");
+        Console.WriteLine($"\nStitches per 4 inch = {stitchesPerInch * 4:F2}");
         Console.WriteLine($"Rows per 4 inch = {rowsPerInch * 4:F2}");
-
+        Console.ResetColor();
     }
 
     public static void CastOnCalculations()
     {
         double castOnLength;
 
-
-
         if (measureSystem == "in")
         {
-            castOnLength = (castOnCountPattern * 4) / stitchesPerMeasurePattern;
-            newCastOnCount = (stitchesPerMeasure * castOnLength) / 4;
-
+            castOnLength = castOnCountPattern * 4 / stitchesPerMeasurePattern;
+            newCastOnCount = stitchesPerMeasure * castOnLength / 4;
         }
         else // (measureSystem == "cm")
         {
-            castOnLength = (castOnCountPattern * 10) / stitchesPerMeasurePattern;
-            newCastOnCount = (stitchesPerMeasure * castOnLength) / 10;
+            castOnLength = castOnCountPattern * 10 / stitchesPerMeasurePattern;
+            newCastOnCount = stitchesPerMeasure * castOnLength / 10;
         }
 
-
-        Console.WriteLine("Results. If needed, round up accordingly to pattern.");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nResults. If needed, round up accordingly to pattern.");
         Console.WriteLine("----------------------------------------------------");
         Console.WriteLine($"New count of Cast-on stitches: {newCastOnCount}. Adjust as needed!");
+        Console.ResetColor();
     }
 
     public static void HowMuchYarnPerWeight()
@@ -677,8 +624,6 @@ class Program
             metersOfProject = Math.Round(yardsOfProject * 0.9144, 1);
             grOfProject = Math.Round(weightOfProject * 28.349523, 1);
             otherSystem = $"Metric system it would weight {grOfProject} grams.";
-
-
         }
         else // (measureSystem == "cm")
         {
@@ -688,107 +633,92 @@ class Program
             otherSystem = $"Imperial system it would weight {ozOfProject} ounces.";
         }
 
-
-        Console.WriteLine("Results. To make this project it was required:");
-        Console.WriteLine("-------------------------------------------");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nResults. To make this project it was required:");
+        Console.WriteLine("----------------------------------------------");
         Console.WriteLine($"{metersOfProject} meters of yarn.");
         Console.WriteLine("...or in other measurement system:");
         Console.WriteLine($"{yardsOfProject} yards of yarn.");
         Console.WriteLine($"\nTotal amount of skeins: {skeinsAmount} ");
-        Console.WriteLine($"If you are wondering in {otherSystem}"); // weight depends on input
+        Console.WriteLine($"If you are wondering in {otherSystem}"); 
+        Console.ResetColor();
     }
 
     public static void BlanketCalculations()
     {
-        Console.WriteLine("Results. To make a blacket:");
-        Console.WriteLine("---------------------------");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nResults. To make a blacket:");
+        Console.WriteLine("-----------------------------");
         Console.WriteLine($"Total stitches needed: {stitchesCount * (desiredWidth / width)}");
         Console.WriteLine($"Total rows needed: {rowsCount * (desiredLength / length)}");
+        Console.ResetColor();
     }
-
 
     public static void HowMuchYarnPerStitches()
     {
+        double lengthOfOneStitch;
+        double lengthOfOneRow;
+        double totalLength;
+        double skeinsAmount;
+        double totalBigLength; // For yards or meters
+        string measIn;
+        string bigMeasIn;
+        string weightIn;
 
-/*        double stitchesPerUnit, rowsPerUnit;
-
-        // Check the measurement system and perform calculations accordingly
-        if (measureSystem == "cm")
+        if (measureSystem == "in")
         {
-            stitchesPerUnit = stitchesCount / width;
-            rowsPerUnit = rowsCount / length;
+            lengthOfOneStitch = lengthOfFrogged / numberOfFrogged;
+            lengthOfOneRow = lengthOfOneStitch * desiredStitchesCount;
+            totalLength = lengthOfOneRow * desiredRowCount;
+            skeinsAmount = totalLength / (lengthPerSkein * 36);
+            totalBigLength = totalLength / 36;
+            measIn = "inches";
+            bigMeasIn = "yards";
+            weightIn = "ounces";
         }
-        else
+        else //(measureSystem == "cm") 
         {
-            double cmToInch = 2.54;
-            width = width / cmToInch;
-            length = length / cmToInch;
-            stitchesPerUnit = stitchesCount / width;
-            rowsPerUnit = rowsCount / length;
-    ....................................................................
-            string measureSystem = "";
-            int lengthPerSkein;
-            int weightPerSkein;
-            int numberOfFrogged
-            double lengthOfFrogged
-            int desiredRowCount;
-            int desiredStitchesCount;
-         */
+            lengthOfOneStitch = lengthOfFrogged / numberOfFrogged;
+            lengthOfOneRow = lengthOfOneStitch * desiredStitchesCount;
+            totalLength = lengthOfOneRow * desiredRowCount;
+            skeinsAmount = totalLength / (lengthPerSkein * 100);
+            totalBigLength = totalLength / 100;
+            measIn = "centimeters";
+            bigMeasIn = "meters";
+            weightIn = "grams";
+        }
 
-        Console.WriteLine("Results. Everything you need to know for your project.");
+        skeinsAmount = Math.Ceiling(skeinsAmount); // Round up to the nearest whole skein
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nResults. Everything you need to know for your project.");
         Console.WriteLine("------------------------------------------------------");
         Console.WriteLine($"In total you gonna need {skeinsAmount} skeins of yarn.");
-        Console.WriteLine("\nCalculations in inches/oz:");
-        Console.WriteLine($"Lenght of yarn used to make 1 stitch: {lengthOfFrogged/numberOfFrogged}"); //need to round up eventually? ($"Stitches per cm = {stitchesPerUnit:F2}");
-        Console.WriteLine($"Lenght of yarn used to make 1 row/round: {desiredRowCount*lengthOfFrogged/numberOfFrogged}");
-        Console.WriteLine($"In total you will use ...inches (or ...yards) of yarn");
-        Console.WriteLine($"Your finished project will weight aprox ...ounces");
-        Console.WriteLine("\nCalculations in cm/grams:");
-        Console.WriteLine($"Lenght of yarn used to make 1 stitch: {lengthOfFrogged/numberOfFrogged}"); //need to round up eventually? ($"Stitches per cm = {stitchesPerUnit:F2}");
-        Console.WriteLine($"Lenght of yarn used to make 1 row/round: {desiredRowCount*lengthOfFrogged/numberOfFrogged}");
-        Console.WriteLine($"In total you will use ...cm (or ...metres) of yarn");
-        Console.WriteLine($"Your finished project will weight aprox ...grams");       
+        Console.WriteLine($"Length of yarn used to make 1 stitch: {lengthOfOneStitch:F1} {measIn}");
+        Console.WriteLine($"Length of yarn used to make 1 row/round: {lengthOfOneRow:F1} {measIn}");
+        Console.WriteLine($"Total approx length of yarn used: {totalLength:F1} {measIn} (or {totalBigLength:F2} {bigMeasIn})");
+        Console.WriteLine($"Your finished project will weight approximately {skeinsAmount * weightPerSkein} {weightIn}");
+        Console.ResetColor();
+    }
+    #endregion
 
+    #region Extras
+    public static void Yellow(string text)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(text);
+        Console.ResetColor();
+    }
 
-        // Display stitches per unit (cm or inch)
-        Console.WriteLine($"Stitches per cm = {stitchesPerUnit:F2}");
-        Console.WriteLine($"Rows per cm = {rowsPerUnit:F2}");
-        Console.WriteLine();
-
-        // Calculate for 10 cm or 10 inches
-        Console.WriteLine($"Stitches per 10 cm = {stitchesPerUnit * 10:F2}");
-        Console.WriteLine($"Rows per 10 cm = {rowsPerUnit * 10:F2}");
-        Console.WriteLine();
-
-        // Calculate for 1 inch or 1 cm
-        double stitchesPerInch = stitchesPerUnit * (measureSystem == "cm" ? 2.54 : 1);
-        double rowsPerInch = rowsPerUnit * (measureSystem == "cm" ? 2.54 : 1);
-        Console.WriteLine($"Stitches per inch = {stitchesPerInch:F2}");
-        Console.WriteLine($"Rows per inch = {rowsPerInch:F2}");
-        Console.WriteLine();
-
-        // Calculate for 4 inches or 4 cm
-        Console.WriteLine($"Stitches per 4 inch = {stitchesPerInch * 4:F2}");
-        Console.WriteLine($"Rows per 4 inch = {rowsPerInch * 4:F2}");
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
+    public static void Magenta(string text)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(text);
+        Console.ResetColor();
+    }
 
     #endregion
-}}
+}
+
 
 
