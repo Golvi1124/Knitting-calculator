@@ -6,16 +6,19 @@ class Program
     static string measureSystem = "";
     static bool validEntry = false;
     static string? input;
-    static int stitchesCount = 0;
-    static int rowsCount = 0;
-    static double width = 0;
-    static double length = 0;
-    static double stitchesPerUnit = 0;
-    static double rowsPerUnit = 0;
+    static int stitchesCount;
+    static int rowsCount;
+    static double width;
+    static double length;
+    static double stitchesPerUnit;
+    static double rowsPerUnit;
     static double stitchesPerMeasure;
     static double stitchesPerMeasurePattern;
     static int castOnCountPattern;
-    static double castOnCount;
+    static double newCastOnCount;
+    static int lengthPerSkein;
+    static int weightPerSkein;
+    static double weightOfProject;
 
     static void Main(string[] args)
     {
@@ -67,9 +70,9 @@ class Program
                     InOrCm();
                     GetStitchesCountPerMeasurement();
                     GetStitchesCountPerMeasurementPattern();
-                    // GetCastOnCountPattern();
+                    GetCastOnCountPattern();
 
-                    //  CastOnCalculations();
+                    CastOnCalculations();
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
@@ -83,11 +86,28 @@ class Program
 
                 case "4": // How much yarn would you need based on: weight of product
 
+                    Console.WriteLine("You have selected: How much yarn would you need based on weight of product.");
+
+                    InOrCm();
+                    GetLengthPerSkein();
+                    GetWeightPerSkein();
+                    GetProjectWeight();
+
+                    HowMuchYarnPerWeight();
+
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
                     break;
 
                 case "5": // Blanket size calculator
+
+                Console.WriteLine("You have selected: Blanket size calculator.");
+                    InOrCm();
+                    GetStitchesCount();
+                    GetRowsCount();
+                    GetWidth();
+                    GetLength();
+
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
@@ -241,7 +261,8 @@ class Program
 
     public static void GetStitchesCountPerMeasurementPattern()
     {
-         {
+        do
+        {
             string prompt;
 
             if (measureSystem == "in")
@@ -269,13 +290,12 @@ class Program
     }
 
 
-
-    
     public static void GetCastOnCountPattern()
+
     {
         do
         {
-            Console.WriteLine($"How many Cast-on stitches pattern asks for?");
+            Console.WriteLine("How many Cast-on stitches pattern asks for?");
             string? input = Console.ReadLine();
 
             if (int.TryParse(input, out castOnCountPattern) && castOnCountPattern > 0)
@@ -289,6 +309,112 @@ class Program
             }
         } while (!validEntry);
     }
+
+
+    public static void GetLengthPerSkein()
+    {
+        do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "Check the label of your yarn. How many yards are in one skein?";
+            }
+            else //(measureSystem == "cm")
+            {
+                prompt = "Check the label of your yarn. How many meters are in one skein?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out lengthPerSkein) && lengthPerSkein > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+
+    }
+    public static void GetWeightPerSkein()
+    {
+        do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "Check the label of your yarn. How many ounces does it weight?";
+            }
+            else //(measureSystem == "cm")
+            {
+                prompt = "Check the label of your yarn. How many grams does it weight?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out weightPerSkein) && weightPerSkein > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+
+    }
+    public static void GetProjectWeight()
+    {
+        do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "How many ounces does the finished project weight?";
+            }
+            else //(measureSystem == "cm")
+            {
+                prompt = "How many grams does the finished project weight?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (double.TryParse(input, out weightOfProject) && weightOfProject > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number and/or use ',' instead of '.'!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     #endregion
@@ -313,8 +439,6 @@ class Program
             rowsPerUnit = rowsCount / length;
         }
 
-
-        // Display results for cm or inch depending on the selected system
         Console.WriteLine("Results. If needed, round up accordingly to pattern.");
         Console.WriteLine("----------------------------------------------------");
 
@@ -341,37 +465,74 @@ class Program
 
     }
 
-
-/* 
-    static double stitchesPerMeasure;
-    static double stitchesPerMeasurePattern;
-    static int castOnCountPattern;
-    result: static double castOnCount;*/
     public static void CastOnCalculations()
     {
+        double castOnLength;
 
-         double stitchesPerUnit, rowsPerUnit;
 
-        // Check the measurement system and perform calculations accordingly
-        if (measureSystem == "cm")
+
+        if (measureSystem == "in")
         {
-            stitchesPerUnit = stitchesCount / width;
-            rowsPerUnit = rowsCount / length;
+            castOnLength = (castOnCountPattern * 4) / stitchesPerMeasurePattern;
+            newCastOnCount = (stitchesPerMeasure * castOnLength) / 4;
+
         }
-        else
+        else // (measureSystem == "cm")
         {
-            double cmToInch = 2.54;
-            width = width / cmToInch;
-            length = length / cmToInch;
-            stitchesPerUnit = stitchesCount / width;
-            rowsPerUnit = rowsCount / length;
+            castOnLength = (castOnCountPattern * 10) / stitchesPerMeasurePattern;
+            newCastOnCount = (stitchesPerMeasure * castOnLength) / 10;
         }
+
 
         Console.WriteLine("Results. If needed, round up accordingly to pattern.");
         Console.WriteLine("----------------------------------------------------");
-
-        Console.WriteLine($"New count of Cast-on stitches: {castOnCount}");
-
+        Console.WriteLine($"New count of Cast-on stitches: {newCastOnCount}. Adjust as needed!");
     }
+
+    public static void HowMuchYarnPerWeight()
+    {
+        double ozOfProject, grOfProject, yardsOfProject, metersOfProject, skeinsAmount;
+        string otherSystem;
+
+        skeinsAmount = weightOfProject / weightPerSkein;
+
+        if (measureSystem == "in")
+        {
+            yardsOfProject = Math.Round(skeinsAmount * lengthPerSkein, 1);
+            metersOfProject = Math.Round(yardsOfProject * 0.9144, 1);
+            grOfProject = Math.Round(weightOfProject * 28.349523, 1);
+            otherSystem = $"Metric system it would weight {grOfProject} grams.";
+
+
+        }
+        else // (measureSystem == "cm")
+        {
+            metersOfProject = Math.Round(skeinsAmount * lengthPerSkein, 1);
+            yardsOfProject = Math.Round(metersOfProject * 1.093613, 1);
+            ozOfProject = Math.Round(weightOfProject * 0.035274, 1);
+            otherSystem = $"Imperial system it would weight {ozOfProject} ounces.";
+        }
+
+
+        Console.WriteLine("Results. To make this project it was required:");
+        Console.WriteLine("-------------------------------------------");
+        Console.WriteLine($"{metersOfProject} meters of yarn.");
+        Console.WriteLine("...or in other measurement system:");
+        Console.WriteLine($"{yardsOfProject} yards of yarn.");
+        Console.WriteLine($"\nTotal amount of skeins: {skeinsAmount} ");
+        Console.WriteLine($"If you are wondering in {otherSystem}"); // weight depends on input
+    }
+
+    
+
+
+
+
+
+
+
+
     #endregion
 }
+
+
