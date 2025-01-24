@@ -19,6 +19,7 @@ class Program
     static int lengthPerSkein;
     static int weightPerSkein;
     static double weightOfProject;
+    static int desiredWidth, desiredLength;
 
     static void Main(string[] args)
     {
@@ -49,7 +50,7 @@ class Program
 
             switch (menuSelection)
             {
-                case "1": // Gauge calculator
+                case "1": // Gauge calculator ✔
 
                     Console.WriteLine("You have selected: Gauge calculator.");
                     InOrCm();
@@ -64,7 +65,7 @@ class Program
                     input = Console.ReadLine();
                     break;
 
-                case "2": // Calculate new Cast-On stitches
+                case "2": // Calculate new Cast-On stitches ✔
 
                     Console.WriteLine("You have selected: Calculate new Cast-On stitches.");
                     InOrCm();
@@ -78,13 +79,13 @@ class Program
                     input = Console.ReadLine();
                     break;
 
-                case "3": // How much yarn would you need based on: stitch length
+                case "3": // How much yarn would you need based on: stitch length 
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
                     input = Console.ReadLine();
                     break;
 
-                case "4": // How much yarn would you need based on: weight of product
+                case "4": // How much yarn would you need based on: weight of product ✔
 
                     Console.WriteLine("You have selected: How much yarn would you need based on weight of product.");
 
@@ -99,14 +100,18 @@ class Program
                     input = Console.ReadLine();
                     break;
 
-                case "5": // Blanket size calculator
+                case "5": // Blanket size calculator ✔
 
-                Console.WriteLine("You have selected: Blanket size calculator.");
+                    Console.WriteLine("You have selected: Blanket size calculator.");
                     InOrCm();
                     GetStitchesCount();
                     GetRowsCount();
                     GetWidth();
                     GetLength();
+                    GetDesiredWidth();
+                    GetDesiredLength();
+
+                    BlanketCalculations();
 
 
                     Console.WriteLine("\n\rPress the Enter key to continue");
@@ -403,6 +408,66 @@ class Program
     }
 
 
+    public static void GetDesiredWidth()
+    {
+         do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "How wide do you want your blanket to be in inches?";
+            }
+            else //(measureSystem == "cm")
+            {
+                prompt = "How wide do you want your blanket to be in centimeters?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out desiredWidth) && desiredWidth > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+
+    }
+    public static void GetDesiredLength()
+    {
+do
+        {
+            string prompt;
+
+            if (measureSystem == "in")
+            {
+                prompt = "How long do you want your blanket to be in inches?";
+            }
+            else //(measureSystem == "cm")
+            {
+                prompt = "How long do you want your blanket to be in centimeters?";
+            }
+
+            Console.WriteLine(prompt);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out desiredLength) && desiredLength > 0)
+            {
+                validEntry = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a positive whole number!");
+                validEntry = false;
+            }
+        } while (!validEntry);
+    }
+
 
 
 
@@ -523,8 +588,13 @@ class Program
         Console.WriteLine($"If you are wondering in {otherSystem}"); // weight depends on input
     }
 
-    
-
+    public static void BlanketCalculations()
+    {
+        Console.WriteLine("Results. To make a blacket:");
+        Console.WriteLine("---------------------------");
+        Console.WriteLine($"Total stitches needed: {stitchesCount*(desiredWidth/width)}");
+        Console.WriteLine($"Total rows needed: {rowsCount*(desiredLength/length)}");
+    }
 
 
 
